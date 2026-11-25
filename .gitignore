@@ -2,4 +2,8 @@
 .env
 .*db
 --pycache__/
+.pytest_cache/backend/app/ml/model.joblib
+__pycache__/
+*.pyc
+*.db
 .pytest_cache/

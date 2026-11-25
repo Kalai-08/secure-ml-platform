@@ -30,3 +30,23 @@ def predict_tumor(
     )
 
     return PredictOut(prediction=label, probability_benign=round(prob_benign,4))
+
+# APIRouter:
+# Used to organize related API endpoints into separate routers/files.
+# Example: users router, admin router, prediction router.
+
+# Depends:
+# Used for Dependency Injection in FastAPI.
+# It automatically provides required dependencies to endpoint functions.
+# Example: Database session using Depends(get_db).
+#         User role checking using Depends(require_roles(...)).
+
+# Request:
+# Represents the current HTTP request.
+# Used to access request details such as HTTP method, URL, headers and client IP.
+# Example: request.method, request.url.path, request.headers.
+
+# Session:
+# SQLAlchemy class used to interact with the database.
+# Used to perform CRUD operations such as INSERT, SELECT, UPDATE and DELETE.
+# Example: db.add(), db.query(), db.commit(), db.delete().

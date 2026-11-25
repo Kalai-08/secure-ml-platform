@@ -26,6 +26,7 @@
 | 9 | No evidence after an incident | Cannot tell who did what | **Audit log**: event, user, email, IP, success flag, detail |
 | 10 | Cross-origin abuse | Unknown website calls the API from a browser | CORS allows only `CORS_ORIGINS` from settings |
 | 11 | Invalid or malicious input | Bad email, short password | Pydantic validation (EmailStr, password 8 to 128 chars) |
+| 12 | Malformed or extreme ML input | Negative or huge feature values | Pydantic range checks on `/predict`, role check (analyst/admin only), every prediction audit-logged |
 
 ## 4. Not yet covered (known gaps / future work)
 - Login rate limiting or account lockout
