@@ -18,9 +18,10 @@ app.add_middleware(
     allow_headers=["Authorization","Content-Type"]
 )
 
-from app.routes import auth, admin
-app.include_router(auth.router)
+from app.routes import auth, admin, predict
 app.include_router(admin.router)
+app.include_router(auth.router)
+app.include_router(predict.router)
 
 @app.get("/health")
 def health():
