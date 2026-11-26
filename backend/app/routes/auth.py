@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.audit import log_event
 from app.core.database import get_db
 from app.core.security import create_access_token, verify_password, hash_password
+from app.core.ratelimit import WINDOW_MINUTES, login_blocked
 from app.deps import get_current_user
 from app.models import User
 from app.schemas import Token, UserCreate, UserOut
@@ -44,6 +45,23 @@ def register(payload: UserCreate, request: Request, db: Session = Depends(get_db
 @router.post("/login", response_model=Token)
 def login(request: Request, form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     email = form.username.lower()
+
+    ip = request.client.host if request.client else None
+    if login_blocked(db, email, ip):
+        log_event(
+            db,
+            "login_blocked",
+            request=request,
+            email=email,
+            success=False,
+            detail="Too many failed attempts"
+        )
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed login attempts, Try again later.",
+            headers={"Retry-After" : str(WINDOW_MINUTES * 60)}
+        )
+    
     user = db.scalar(select(User).where(User.email == email))
     password_hash = user.password_hash if user else _DUMMY_HASH  # Use dummy hash if user not found
     password_ok = verify_password(form.password, password_hash)

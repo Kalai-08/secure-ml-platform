@@ -16,7 +16,7 @@
 | # | Threat | Example | Mitigation (implemented) |
 |---|--------|---------|--------------------------|
 | 1 | Password theft from DB leak | Attacker reads the users table | Passwords hashed with **argon2**, never stored in plain text |
-| 2 | Brute-force or credential guessing | Many login attempts | Same 401 message for all failures, failures logged in audit log |
+| 2 | Brute-force or credential guessing | Many login attempts | Lockout: 5 failed logins per email (or 20 per IP) in 15 minutes returns HTTP 429 with `Retry-After`. Counted from the audit log, blocks are logged as `login_blocked` |
 | 3 | User enumeration | Timing or message difference reveals which emails exist | Dummy-hash verification when the user is not found, identical error message |
 | 4 | Privilege escalation at signup | Sending `"role": "admin"` in register | Role is never read from the request, default is `viewer` |
 | 5 | Accessing admin APIs as a normal user | viewer calls `/admin/users` | **RBAC**: `require_roles(Role.admin)`, role read from the DB on every request |
