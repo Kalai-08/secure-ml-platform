@@ -18,7 +18,7 @@ export async function api(path, {method = "GET", body, form, token} ={}){
     const data = await res.json().catch(() => null)
 
     if(!res.ok){
-        const detail = Array.isArray(date?.detail)
+        const detail = Array.isArray(data?.detail)
         ? data.detail.map((d) => d.msg).join(", ")
         : data?.detail;
 
