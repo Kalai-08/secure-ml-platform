@@ -6,7 +6,7 @@ export async function api(path, {method = "GET", body, form, token} ={}){
 
     if(form){
         headers["Content-Type"] = "application/x-www-form-urlencoded"
-        paylaod  = new URLSearchParams(form)
+        payload  = new URLSearchParams(form)
     }else if(body){
         headers["Content-Type"] = "application/json"
         payload = JSON.stringify(body)
